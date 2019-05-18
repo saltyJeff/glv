@@ -3,6 +3,7 @@ from typing import List
 from time import sleep, time
 import traceback
 from logging import getLogger, Logger, INFO, basicConfig
+from math import sin, pi
 
 basicConfig(
     format='%(asctime)s %(levelname)s %(name)s - %(message)s',
@@ -10,6 +11,16 @@ basicConfig(
 logger: Logger = getLogger()
 logger.setLevel(INFO)
 
+class Sinusoidal(Func):
+    def __init__(self, amp: float, period: float):
+        super().__init__()
+        self.amp = amp
+        self.phase = 2 * pi / period
+    def shouldUpdate(self):
+        return True
+    def update(self):
+        self.out(sin(time() * self.phase) * self.amp)
+    
 class AddThree(Func):
     def __init__(self, opOne: Output[int]):
         super().__init__()
@@ -18,19 +29,16 @@ class AddThree(Func):
         self.out(newVal)
 
 def main():
-    varFunc = Const(8) |then('potato')| Variable
-    varFunc >> AddThree >> AddThree >> AddThree \
-            >> Print
+    Sinusoidal(1, 1)
 
     graph = makeGraph()
+    # graph.browser()
     print(graph)
     while True:
         newVal = int(input("Enter a number: "))
         if newVal == -1:
             killThreads()
             exit()
-        print('Expect to see it plus 3')
-        varFunc.update(newVal)
 
 if __name__ == '__main__':
     try:

@@ -6,6 +6,9 @@ T = TypeVar('T')
 class Const(Func[T]):
     def __init__(self, val: T):
         super().__init__()
+        self.name = str(val)
+        self.constArgStr = ''
+        self.inputArgStr = ''
         self.output.assign(val)
     def shouldUpdate(self):
         return False

@@ -5,6 +5,7 @@ class Variable(Func[T]):
     name: str
     def __init__(self, setter: Output[T], name: str = 'unknown var'):
         super().__init__()
+        self.constArgStr = ''
         self.name = name
         self.setter = setter
     

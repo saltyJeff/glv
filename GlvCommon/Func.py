@@ -11,16 +11,20 @@ class Func(Generic[T]):
     output: Output[T]
     uuid: str
     name: str
+    constArgStr: str
+    inputArgStr: str
     def __init__(self):
         lastFrame = currentframe().f_back
         locals = lastFrame.f_locals
         argNames: list[str] = list(lastFrame.f_code.co_varnames)
 
+        self.constArgs: list = list()
         def cleanArgs(varName: str):
             if varName == 'self' or varName.startswith('_'):
                 return False
             if isinstance(locals[varName], Output):
                 return True
+            self.constArgs.append((varName, str(locals[varName])))
             return False
 
         cleanedArgs = list(filter(cleanArgs, argNames))
@@ -34,12 +38,30 @@ class Func(Generic[T]):
             return inputVar
 
         self.inputs = list(map(registerInputs, cleanedArgs))
-        self.name = locals['__class__'].__name__
         self.output = Output[T](self)
         self.out = self.output.assign
-        self.uuid = uuid()
+        if 'uuid' in argNames:
+            self.uuid = locals['uuid']
+        else:
+            self.uuid = uuid()[:5]
 
-        getThread(0).attachFunc(self)
+        self.name = locals['__class__'].__name__
+        self.name += f'_{self.uuid}'
+
+        self.constArgStr = ''
+        if len(self.constArgs) > 0:
+            self.constArgStr += '(\n'
+            for constArg in self.constArgs:
+                self.constArgStr += f'{constArg[0]}={constArg[1]}\n'
+            self.constArgStr += ')'
+
+        self.inputArgStr = ''
+        for inputVar in self.inputs:
+            self.inputArgStr += f'\n{inputVar.name} ← {inputVar.sourceName()}'
+        self.threadNum = 0
+        if 'thread' in argNames:
+            self.threadNum = locals['thread']
+        getThread(self.threadNum).attachFunc(self)
 
     def shouldUpdate(self) -> bool:
         for inputVar in self.inputs:
