@@ -13,14 +13,15 @@ class Func(Generic[T]):
     name: str
     constArgStr: str
     inputArgStr: str
-    def __init__(self):
-        lastFrame = currentframe().f_back
+    def __init__(self, lastFrame=None, *args, **kwargs):
+        if lastFrame is None:
+            lastFrame = currentframe().f_back
         locals = lastFrame.f_locals
         argNames: list[str] = list(lastFrame.f_code.co_varnames)
 
         self.constArgs: list = list()
         def cleanArgs(varName: str):
-            if varName == 'self' or varName.startswith('_'):
+            if varName == 'self' or varName == 'kwargs' or varName.startswith('_') or not varName in locals:
                 return False
             if isinstance(locals[varName], Output):
                 return True
@@ -52,6 +53,8 @@ class Func(Generic[T]):
         if len(self.constArgs) > 0:
             self.constArgStr += '(\n'
             for constArg in self.constArgs:
+                if constArg[0] in hiddenVars:
+                    continue
                 self.constArgStr += f'{constArg[0]}={constArg[1]}\n'
             self.constArgStr += ')'
 
@@ -59,10 +62,17 @@ class Func(Generic[T]):
         for inputVar in self.inputs:
             self.inputArgStr += f'\n{inputVar.name} ← {inputVar.sourceName()}'
         self.threadNum = 0
-        if 'thread' in argNames:
-            self.threadNum = locals['thread']
-        getThread(self.threadNum).attachFunc(self)
 
+        if 'kwargs' in locals:
+            kwargs = locals['kwargs']
+            if 'thread' in kwargs:
+                print('thread overrun')
+                self.threadNum = kwargs['thread']
+            getThread(self.threadNum).attachFunc(self)
+
+    def initFunc(*args, **kwargs):
+        print(f'No init {args}, {kwargs}')
+        
     def shouldUpdate(self) -> bool:
         for inputVar in self.inputs:
             if inputVar.dirty:
@@ -75,6 +85,8 @@ class Func(Generic[T]):
     def cleanAll(self):
         for inputVar in self.inputs:
             inputVar.dirty = False
+
+hiddenVars = ['lastFrame']
 
 def isGlvIn(memberTuple) -> bool:
     obj = memberTuple[1].__class__

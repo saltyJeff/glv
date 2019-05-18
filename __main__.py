@@ -6,14 +6,8 @@ import traceback
 from logging import getLogger, Logger, INFO, basicConfig
 from math import sin, pi
 
-basicConfig(
-    format='%(asctime)s %(levelname)s %(name)s - %(message)s',
-    datefmt='%m/%d/%Y %H:%M:%S')
-logger: Logger = getLogger()
-logger.setLevel(INFO)
-
 class Sinusoidal(Func):
-    def __init__(self, amp: float, period: float):
+    def __init__(self, amp: float, period: float, **kwargs):
         super().__init__()
         self.amp = amp
         self.phase = 2 * pi / period
@@ -22,17 +16,22 @@ class Sinusoidal(Func):
     def update(self):
         self.out(sin(time() * self.phase) * self.amp)
     
-class AddThree(Func):
-    def __init__(self, opOne: Output[int]):
+class AddN(Func):
+    def __init__(self, opOne: Output[int], n):
         super().__init__()
+        self.n = n
     def update(self):
-        newVal = self.opOne() + 3
+        newVal = self.opOne() + self.n
         self.out(newVal)
 
 def main():
     sine = Sinusoidal(1, 1)
-    sine >> TextLabel
-    sine >> AddThree >> TextLabel
+    sine >> then(AddN, 4) >> TextLabel
+    gridder.nextRow()
+    sine >> then(AddN, 1) >> then(Gauge, maxValue=2, thread=1)
+    sine >> then(AddN, 1) >> then(Gauge, maxValue=2)
+    sine >> then(AddN, 1) >> then(Gauge, maxValue=2)
+    sine >> then(AddN, 1) >> then(Gauge, maxValue=2)
     startGui()
 
 if __name__ == '__main__':

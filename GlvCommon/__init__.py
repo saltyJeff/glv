@@ -8,4 +8,11 @@ from GlvCommon.Print import Print
 from GlvCommon.FuncThread import killThreads
 from GlvCommon.graphify import makeGraph
 
+from logging import *
+basicConfig(
+    format='%(asctime)s %(levelname)s %(name)s - %(message)s',
+    datefmt='%m/%d/%Y %H:%M:%S')
+logger: Logger = getLogger()
+logger.setLevel(INFO)
+
 __all__ = ['Const', 'Func', 'Input', 'Output', 'then', 'Variable', 'Infix', 'Print', 'killThreads', 'makeGraph']

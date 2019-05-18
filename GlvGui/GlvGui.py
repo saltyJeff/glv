@@ -1,21 +1,17 @@
 from tkinter import Tk, Label, Button
+root = Tk()
 from GlvCommon import *
 from typing import List
+from GlvGui.Gridder import Gridder
 
 class GlvGui(object):
-    thisRow: int
     def __init__(self, master: Tk):
         self.master = master
-        self.thisRow = 0
-        master.title('Glv Gui')
-    def nextRow(self):
-        self.thisRow = self.thisRow + 1
-        return self.thisRow
-    def currentRow(self):
-        return self.thisRow
-font = ("Comic Sans MS", 24)
-root = Tk()
-root.geometry('500x500')
+        self.master.title('Glv Gui')
+
+sansFont = ("Calibri", 18)
+serifFont = ("Courier", 18)
+
 glvGui = GlvGui(root)
 dying = False
 def onExit():
@@ -29,6 +25,8 @@ root.wm_protocol("WM_DELETE_WINDOW", onExit)
 guiFuncs: List[Func] = list()
 def registerSelf(func: Func):
     guiFuncs.append(func)
+
+gridder = Gridder()
 
 def startGui():
     while True:
