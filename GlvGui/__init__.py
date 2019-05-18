@@ -1,3 +1,4 @@
-from GlvGui.GlvGui import GlvGui
+from GlvGui.GlvGui import glvGui, startGui
+from GlvGui.TextLabel import TextLabel
 
-__all__ = ['GlvGui']
+__all__ = ['glvGui', 'startGui', 'TextLabel']

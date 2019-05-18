@@ -1,4 +1,5 @@
 from GlvCommon import *
+from GlvGui import *
 from typing import List
 from time import sleep, time
 import traceback
@@ -29,16 +30,10 @@ class AddThree(Func):
         self.out(newVal)
 
 def main():
-    Sinusoidal(1, 1)
-
-    graph = makeGraph()
-    # graph.browser()
-    print(graph)
-    while True:
-        newVal = int(input("Enter a number: "))
-        if newVal == -1:
-            killThreads()
-            exit()
+    sine = Sinusoidal(1, 1)
+    sine >> TextLabel
+    sine >> AddThree >> TextLabel
+    startGui()
 
 if __name__ == '__main__':
     try:

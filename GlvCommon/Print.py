@@ -5,6 +5,5 @@ class Print(Func):
     def __init__(self, src):
         super().__init__()
     def update(self):
-        for inputVar in self.inputs:
-            print(inputVar.sourceName()+': '+str(inputVar.value()), end='\t')
+        print(self.in_src.sourceName()+': '+str(self.in_src.value()))
         print()
