@@ -15,13 +15,15 @@ class AddThree(Func):
         super().__init__()
     def update(self):
         newVal = self.opOne() + 3
-        self.output.assign(newVal)
+        self.out(newVal)
 
 def main():
     varFunc = Const(8) |then('potato')| Variable
     varFunc >> AddThree >> AddThree >> AddThree \
             >> Print
 
+    graph = makeGraph()
+    print(graph)
     while True:
         newVal = int(input("Enter a number: "))
         if newVal == -1:

@@ -6,11 +6,10 @@ T = TypeVar('T')
 class Output(Generic[T]):
     last: Optional[T]
     value: Optional[T]
-    name: str
-    def __init__(self, val: Optional[T] = None, name: str = '?'):
+    def __init__(self, func, val: Optional[T] = None):
         self.last = None
         self.value = None
-        self.name = name
+        self.func = func
         self.listeners: Set[Input[T]] = set() #not sure why i can't declare earlier
         self.assign(val)
         
@@ -20,13 +19,16 @@ class Output(Generic[T]):
         if notify:
             for listener in self.listeners:
                 listener.dirty = True
+    def name(self):
+        return self.func.name
     
 class Input(Generic[T]):
     dirty: bool
     name: str
-    def __init__(self, listenTo: Output[T]):
+    def __init__(self, func, listenTo: Output[T]):
         self.attatchTo(listenTo)
         self.dirty = True
+        self.func = func
         self.name = 'unbound'
     def attatchTo(self, listenTo: Output[T]):
         self.attachedTo = listenTo
@@ -41,7 +43,7 @@ class Input(Generic[T]):
     def attached(self):
         return self.attachedTo
     def sourceName(self):
-        return self.attachedTo.name
+        return self.attachedTo.name()
 
 def typesEqual(typ1: Type, typ2: Type):
     if typ1 is None or typ2 is None:
