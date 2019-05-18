@@ -3,6 +3,7 @@ root = Tk()
 from GlvCommon import *
 from typing import List
 from GlvGui.Gridder import Gridder
+from time import time
 
 class GlvGui(object):
     def __init__(self, master: Tk):
@@ -30,9 +31,16 @@ gridder = Gridder()
 
 def startGui():
     while True:
+        startTime = time()
         for guiFunc in guiFuncs:
             guiFunc.guiUpdate()
         if not dying:
             root.update()
         else:
             break
+        timeSpan = time() - startTime
+        if timeSpan != 0:
+            rate = 1 / timeSpan
+            root.title(f'Glv Gui ( {rate:05.2f} hz )')
+        else:
+            root.title('Glv Gui ( ♾️ hz )')

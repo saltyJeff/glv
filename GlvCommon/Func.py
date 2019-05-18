@@ -13,7 +13,7 @@ class Func(Generic[T]):
     name: str
     constArgStr: str
     inputArgStr: str
-    def __init__(self, lastFrame=None, *args, **kwargs):
+    def __init__(self, lastFrame=None):
         if lastFrame is None:
             lastFrame = currentframe().f_back
         locals = lastFrame.f_locals
@@ -68,11 +68,8 @@ class Func(Generic[T]):
             if 'thread' in kwargs:
                 print('thread overrun')
                 self.threadNum = kwargs['thread']
-            getThread(self.threadNum).attachFunc(self)
+        getThread(self.threadNum).attachFunc(self)
 
-    def initFunc(*args, **kwargs):
-        print(f'No init {args}, {kwargs}')
-        
     def shouldUpdate(self) -> bool:
         for inputVar in self.inputs:
             if inputVar.dirty:
