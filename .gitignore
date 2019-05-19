@@ -128,4 +128,6 @@ dmypy.json
 .pyre/
 
 stuff.py
+*.gv
+*.pdf
 # End of https://www.gitignore.io/api/python

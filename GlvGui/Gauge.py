@@ -15,7 +15,7 @@ class Gauge(GlvWidget):
     radius: float
     origin: float
     color: int
-    def __init__(self, src, minVal=0, maxVal=100, color=(255, 0, 0)):
+    def __init__(self, src, minVal=0, maxVal=100, color=None):
         super().__init__()
         self.row = gridder.shareRow()
         self.col = gridder.takeCol()
@@ -31,22 +31,25 @@ class Gauge(GlvWidget):
         self.origin = self.col + self.radius
     def guiUpdate(self):
         # draw gauge
+        drawColor = self.color
+        if drawColor is None:
+            drawColor = colors.accent()
         theta = rescale(self.value, (self.minVal, self.maxVal), (0, pi))
         theta = pi - theta
         endX = self.origin + self.radius * cos(theta)
         endY = self.textY - self.radius * sin(theta)
-        pygame.draw.line(root, self.color, (self.origin, self.textY), (endX, endY))
+        pygame.draw.line(root, drawColor, (self.origin, self.textY), (endX, endY))
         
         # draw labels
-        titleSurface = serifFont.render(self.sourceName, False, accent)
-        valSurface = detailFont.render(str(self.value), False, accent)
+        titleSurface = serifFont.render(self.sourceName, False, colors.text())
+        valSurface = detailFont.render(str(self.value), False, colors.text())
         root.blit(titleSurface, (self.centerOffset(titleSurface), self.textY))
         root.blit(valSurface, (self.centerOffset(valSurface), self.textY + TEXT_HEIGHT))
         
         # annotate the gauge's min and max
-        minSurface = detailFont.render(str(self.minVal), False, accent)
-        maxSurface = detailFont.render(str(self.maxVal), False, accent)
-        midSurface = detailFont.render(f'{((self.minVal + self.maxVal) / 2):.2f}', False, accent)
+        minSurface = detailFont.render(str(self.minVal), False, colors.text())
+        maxSurface = detailFont.render(str(self.maxVal), False, colors.text())
+        midSurface = detailFont.render(f'{((self.minVal + self.maxVal) / 2):.2f}', False, colors.text())
         detailY = self.textY - TEXT_HEIGHT / 2
         maxSurfaceX = self.col + COL_WIDTH - maxSurface.get_width()
         root.blit(minSurface, (self.col, detailY))

@@ -16,7 +16,7 @@ class TextLabel(GlvWidget):
         self.sourceName = self.in_src.sourceName()
     def guiUpdate(self):
         drawStr = f'{self.sourceName}: {self.labelVal}'
-        surface = serifFont.render(drawStr, False, accent)
+        surface = serifFont.render(drawStr, False, colors.text())
         root.blit(surface, (20, self.row))
     def update(self):
         self.labelVal = str(self.in_src.value())[:12]
