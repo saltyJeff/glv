@@ -55,3 +55,4 @@ def typesEqual(typ1: Type, typ2: Type):
     if typ1 is typ2:
         return True
     return issubclass(typ1, typ2)
+    

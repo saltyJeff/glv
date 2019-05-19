@@ -28,16 +28,17 @@ def main():
     sine = Sinusoidal(1, 1)
     sine >> then(Gauge, minVal=-1, maxVal=1)
     sine >> then(Gauge, minVal=-1, maxVal=1)
-    gridder.nextRow()
     sine >> then(Gauge, minVal=-1, maxVal=1)
+    sine >> then(Gauge, minVal=-1, maxVal=1)
+    sine >> then(Gauge, minVal=-1, maxVal=1)
+    gridder.nextRow()
+    bigSine = Sinusoidal(4, 2, thread=0)
+    bigSine >> TextLabel
+    bigSine >> TextLabel
+    bigSine >> TextLabel
+    bigSine >> then(Gauge, minVal=-1, maxVal=1)
     # sine >> then(AddN, 1) >> then(Gauge, thread=1, maxValue=2)
     startGui()
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception as e:
-        print(e)
-        traceback.print_exc()
-        killThreads()
-        exit(1)
+    main()

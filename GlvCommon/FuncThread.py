@@ -8,9 +8,8 @@ class FuncThread(Thread):
         self.funcs: List = []
         self.die = False
         self.num = num
-        self.logger: Logger = getLogger(f'Pool {num}')
+        self.logger: Logger = getLogger(f'FuncThread{num}')
     def kill(self):
-        self.logger.warn('Dying')
         self.die = True
     def attachFuncs(self, funcs: List):
         for arg in funcs:
@@ -25,16 +24,19 @@ class FuncThread(Thread):
                     if func.shouldUpdate():
                         start = time()
                         func.update()
-                        self.logger.debug(type(func).__name__, time() - start)
+                        self.logger.debug(f'{type(func).__name__}: {(time() - start):.2f}s')
             except Exception as e:
                 self.logger.error(e)
+        self.logger.warn('Dead')
 
+logger = getLogger('ThreadPool')
 pool: Dict[int, FuncThread] = {}
 def getThread(num: int) -> FuncThread:
     if not (num in pool):
         newThread = FuncThread(num)
         newThread.start()
         pool[num] = newThread
+        logger.warn(f'Spawning new thread {num}')
         return newThread
     return pool[num]
 
