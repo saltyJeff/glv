@@ -24,6 +24,7 @@ class Gauge(GlvWidget):
         self.value = minVal
         self.sourceName = self.in_src.sourceName()
         self.color = color
+        self.clamped = False
 
         # perform offset calculations
         self.textY = self.row + ROW_HEIGHT - 2 * TEXT_HEIGHT
@@ -31,18 +32,21 @@ class Gauge(GlvWidget):
         self.origin = self.col + self.radius
     def guiUpdate(self):
         # draw gauge
-        drawColor = self.color
-        if drawColor is None:
-            drawColor = colors.accent()
+        lineColor = self.color
+        if lineColor is None:
+            lineColor = colors.accent()
         theta = rescale(self.value, (self.minVal, self.maxVal), (0, pi))
         theta = pi - theta
         endX = self.origin + self.radius * cos(theta)
         endY = self.textY - self.radius * sin(theta)
-        pygame.draw.line(root, drawColor, (self.origin, self.textY), (endX, endY))
+        pygame.draw.line(root, lineColor, (self.origin, self.textY), (endX, endY))
         
         # draw labels
         titleSurface = serifFont.render(self.sourceName, False, colors.text())
-        valSurface = detailFont.render(str(self.value), False, colors.text())
+        valText = str(self.value)
+        if self.clamped:
+            valText = '! ' + valText + ' !'
+        valSurface = detailFont.render(valText, False, colors.text())
         root.blit(titleSurface, (self.centerOffset(titleSurface), self.textY))
         root.blit(valSurface, (self.centerOffset(valSurface), self.textY + TEXT_HEIGHT))
         
@@ -61,6 +65,7 @@ class Gauge(GlvWidget):
 
     def update(self):
         self.value = clamp(self.src(), self.minVal, self.maxVal)
+        self.clamped = self.value != self.src()
 
 def clamp(val, minVal, maxVal) -> float:
     return max(minVal, min(val, maxVal))
