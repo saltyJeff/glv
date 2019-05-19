@@ -26,23 +26,10 @@ class AddN(Func):
 
 def main():
     sine = Sinusoidal(1, 1)
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
-    sine >> then(AddN, 4) >> TextLabel
+    sine >> then(Gauge, minVal=-1, maxVal=1)
+    sine >> then(Gauge, minVal=-1, maxVal=1)
     gridder.nextRow()
+    sine >> then(Gauge, minVal=-1, maxVal=1)
     # sine >> then(AddN, 1) >> then(Gauge, thread=1, maxValue=2)
     startGui()
 

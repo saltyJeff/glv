@@ -1,5 +1,5 @@
-from GlvGui.GlvGui import glvGui, startGui, gridder
+from GlvGui.GlvGui import startGui, gridder, root
 from GlvGui.TextLabel import TextLabel
 from GlvGui.Gauge import Gauge
 
-__all__ = ['glvGui', 'startGui', 'TextLabel', 'Gauge', 'gridder']
+__all__ = ['startGui', 'TextLabel', 'gridder', 'root', 'Gauge']

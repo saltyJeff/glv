@@ -1,46 +1,47 @@
-from tkinter import Tk, Label, Button
-root = Tk()
+import pygame
 from GlvCommon import *
 from typing import List
 from GlvGui.Gridder import Gridder
 from time import time
 
-class GlvGui(object):
-    def __init__(self, master: Tk):
-        self.master = master
-        self.master.title('Glv Gui')
+pygame.init()
 
-sansFont = ("Calibri", 18)
-serifFont = ("Courier", 18)
+sansFont = pygame.font.SysFont("Calibri", 18)
+serifFont = pygame.font.SysFont("Courier", 18)
+detailFont = pygame.font.SysFont("Courier", 12)
+accent = (255,255,255)
+back = (0,0,0)
 
-glvGui = GlvGui(root)
+gridder = Gridder()
+
+root = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+
+# setting it directly to 648x480 means the update blanks only the smaller window
+# instead of the whole thing
+pygame.display.set_mode((648, 480), pygame.RESIZABLE)
+
 dying = False
-def onExit():
-    global dying
-    dying = True
-    killThreads()
-    root.destroy()
-
-root.wm_protocol("WM_DELETE_WINDOW", onExit)
-
 guiFuncs: List[Func] = list()
 def registerSelf(func: Func):
     guiFuncs.append(func)
 
-gridder = Gridder()
-
 def startGui():
-    while True:
+    global dying
+    while not dying:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                dying = True
+        
         startTime = time()
+        root.fill(back) # update blanking
         for guiFunc in guiFuncs:
             guiFunc.guiUpdate()
-        if not dying:
-            root.update()
-        else:
-            break
+        pygame.display.flip()
+        # hz display
         timeSpan = time() - startTime
         if timeSpan != 0:
             rate = 1 / timeSpan
-            root.title(f'Glv Gui ( {rate:05.2f} hz )')
+            pygame.display.set_caption(f'Glv Gui ( {rate:05.2f} hz )')
         else:
-            root.title('Glv Gui ( ♾️ hz )')
+            pygame.display.set_caption('Glv Gui ( ♾️ hz )')
+    killThreads()
