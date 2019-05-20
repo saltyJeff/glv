@@ -11,7 +11,7 @@ class NumericInput(GlvWidget):
     col: int
     def __init__(self, label='Ur #'):
         super().__init__()
-        self.row = gridder.thisRow()
+        self.row = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
         self.col = gridder.takeCol()
         self.label = label
         self.textInput = TextInput(
@@ -38,7 +38,11 @@ class NumericInput(GlvWidget):
                 inputText = inputText[:14]
             self.textInput.set_text(inputText)
             if self.lastText != inputText:
-                self.out(parseNum(inputText))
+                try:
+                    val = parseNum(inputText)
+                    self.out(val)
+                except:
+                    pass
                 self.lastText = inputText
         root.blit(self.textInput.get_surface(), (self.col + 10, self.row + 1.1 * TEXT_HEIGHT))
         pygame.draw.rect(root, borderColor, boundingRect, 2)
@@ -46,16 +50,12 @@ class NumericInput(GlvWidget):
         root.blit(labelSurface, (self.col, self.row))
 
 def parseNum(numStr):
-    try:
-        # if decimal point, then get rid of it
-        if '.' in numStr:
-            return float(numStr)
-        if numStr.startswith('0b'):
-            return int(numStr[2:], 2)
-        elif numStr.startswith('0x'):
-            return int(numStr[2:], 16)
-        return int(numStr)
-    except Exception as e:
-        print(f'unable to convert {numStr} to number')
-        return 0
+    # if decimal point, then get rid of it
+    if '.' in numStr:
+        return float(numStr)
+    if numStr.startswith('0b'):
+        return int(numStr[2:], 2)
+    elif numStr.startswith('0x'):
+        return int(numStr[2:], 16)
+    return int(numStr)
     

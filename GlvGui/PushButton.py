@@ -15,7 +15,7 @@ class PushButton(GlvWidget):
     col: int
     def __init__(self, label='Ur Butt'):
         super().__init__()
-        self.row = gridder.thisRow()
+        self.row = gridder.shareRow(rowHeight=2 * TEXT_HEIGHT)
         self.col = gridder.takeCol()
         self.label = label
         self.primed = False

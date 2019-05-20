@@ -12,12 +12,15 @@ class Gridder:
         self.thisX = LEFT_PAD
         self.thisY = TOP_PAD
         self.maxCol = 0
-    def thisRow(self):
+        self.rowMax = 0
+    def shareRow(self, rowHeight=ROW_HEIGHT):
+        self.rowMax = max(self.rowMax, rowHeight)
         return self.thisY
-    def nextRow(self, rowHeight=ROW_HEIGHT):
-        self.thisY = self.thisY + rowHeight + BOTTOM_PAD
+    def nextRow(self, rowHeight=0):
+        self.thisY = self.thisY + self.rowMax + BOTTOM_PAD
+        self.rowMax = 0
         self.thisX = LEFT_PAD
-        return self.thisY
+        return self.shareRow(rowHeight=rowHeight)
     def takeCol(self, colWidth=COL_WIDTH, overflowHeight=ROW_HEIGHT):
         ret = self.thisX
         self.thisX = self.thisX + colWidth + RIGHT_PAD

@@ -10,11 +10,11 @@ class TextLabel(GlvWidget):
     sourceName: str
     row: int
     col: int
-    def __init__(self, src, inline=False):
+    def __init__(self, src, inline=True):
         super().__init__()
         if not inline:
             gridder.nextRow(rowHeight=2*TEXT_HEIGHT)
-        self.row = gridder.thisRow()
+        self.row = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
         self.col = gridder.takeCol()
         self.labelVal = ''
         self.sourceName = self.in_src.sourceName()

@@ -2,6 +2,7 @@ from threading import Thread
 from typing import List, Dict
 from time import time
 from logging import getLogger, Logger
+import traceback
 class FuncThread(Thread):
     def __init__(self, num: int):
         super().__init__()
@@ -27,6 +28,7 @@ class FuncThread(Thread):
                         self.logger.debug(f'{type(func).__name__}: {(time() - start):.2f}s')
             except Exception as e:
                 self.logger.error(e)
+                traceback.print_exc()
         self.logger.warn('Dead')
 
 logger = getLogger('ThreadPool')

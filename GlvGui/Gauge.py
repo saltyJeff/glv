@@ -17,7 +17,7 @@ class Gauge(GlvWidget):
     color: int
     def __init__(self, src, minVal=0, maxVal=100, color=None):
         super().__init__()
-        self.row = gridder.thisRow()
+        self.row = gridder.shareRow()
         self.col = gridder.takeCol()
         self.minVal = minVal
         self.maxVal = maxVal
