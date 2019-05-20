@@ -46,6 +46,8 @@ def main():
     bigSine >> then(TextLabel)
     ToggleButton(label='toggly boi') >> Counter >> then(TextLabel, inline=True)
     PushButton(label='pushy boi') >> Counter >> then(TextLabel, inline=True)
+    gridder.nextRow(rowHeight=2*TEXT_HEIGHT)
+    NumericInput(label='hi') >> then(TextLabel, inline=True)
     startGui()
 
 if __name__ == '__main__':
