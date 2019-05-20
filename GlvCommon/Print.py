@@ -6,4 +6,3 @@ class Print(Func):
         super().__init__()
     def update(self):
         print(self.in_src.sourceName()+': '+str(self.in_src.value()))
-        print()

@@ -17,7 +17,7 @@ class Gauge(GlvWidget):
     color: int
     def __init__(self, src, minVal=0, maxVal=100, color=None):
         super().__init__()
-        self.row = gridder.shareRow()
+        self.row = gridder.thisRow()
         self.col = gridder.takeCol()
         self.minVal = minVal
         self.maxVal = maxVal
@@ -42,7 +42,7 @@ class Gauge(GlvWidget):
         pygame.draw.line(root, lineColor, (self.origin, self.textY), (endX, endY))
         
         # draw labels
-        titleSurface = serifFont.render(self.sourceName, False, colors.text())
+        titleSurface = sansFont.render(self.sourceName, False, colors.text())
         valText = str(self.value)
         if self.clamped:
             valText = '! ' + valText + ' !'

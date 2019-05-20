@@ -32,8 +32,17 @@ def startGui():
 
 dying = False
 WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
+mousePressedEvt = False
+mouseReleasedEvt = False
+def mousePos():
+    return pygame.mouse.get_pos()
+def mousePressed():
+    return mousePressedEvt
+def mouseReleased():
+    return mouseReleasedEvt
+
 def glvLoop():
-    global dying
+    global dying, mousePressedEvt, mouseReleasedEvt
     while not dying:
         startTime = time()
         for event in pygame.event.get():
@@ -42,6 +51,10 @@ def glvLoop():
             elif event.type == pygame.VIDEORESIZE:
                 WINDOW_WIDTH = event.w
                 WINDOW_HEIGHT = event.h
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mousePressedEvt = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                mouseReleasedEvt = True        
             elif event.type == pygame.KEYDOWN:
                 if event.unicode == 'd':
                     colors.toggle()
@@ -51,9 +64,8 @@ def glvLoop():
                         graph.view()
                     except Exception as e:
                         print(e)
-                        print('Could not open graphview visualizer, do you have them installed from https://www.graphviz.org/download/')
-                        print('Dumping graph below:')
                         print(graph)
+                        print('Could not open graphview visualizer, do you have them installed from https://www.graphviz.org/download/')
                 
         root.fill(colors.back()) # update blanking
         for guiFunc in guiFuncs:
@@ -68,4 +80,7 @@ def glvLoop():
         surface = serifFont.render(caption, False, colors.text())
         root.blit(surface, (WINDOW_WIDTH - surface.get_width(), 0))
         pygame.display.flip()
+
+        mousePressedEvt = False
+        mouseReleasedEvt = False
     killThreads()
