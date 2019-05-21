@@ -7,19 +7,17 @@ from GlvGui.Gridder import ROW_HEIGHT, COL_WIDTH, TEXT_HEIGHT
 
 class ToggleButton(GlvWidget):
     label: str
-    row: int
-    col: int
     def __init__(self, label='Ur Butt'):
         super().__init__()
-        self.row = gridder.shareRow(rowHeight=2 * TEXT_HEIGHT)
-        self.col = gridder.takeCol()
+        self.y = gridder.shareRow(rowHeight=2 * TEXT_HEIGHT)
+        self.x = gridder.takeCol()
         self.label = label
         self.set = False
     def guiUpdate(self):
         borderColor = colors.text()
         textColor = colors.text()
         # handle clicks
-        buttonRect = pygame.Rect(self.col, self.row, COL_WIDTH, 2 * TEXT_HEIGHT)
+        buttonRect = pygame.Rect(self.x, self.y, COL_WIDTH, 2 * TEXT_HEIGHT)
         if buttonRect.collidepoint(mousePos()):
             if mousePressed():
                 self.set = not self.set
@@ -31,8 +29,8 @@ class ToggleButton(GlvWidget):
             textColor = colors.back()
             pygame.draw.rect(root, colors.text(), buttonRect)
         
-        midX = self.col + COL_WIDTH / 2
-        midY = self.row + (2 * TEXT_HEIGHT) / 2
+        midX = self.x + COL_WIDTH / 2
+        midY = self.y + (2 * TEXT_HEIGHT) / 2
         pygame.draw.rect(root, borderColor, buttonRect, 4)
         
         surface = sansFont.render(self.label, False, textColor)

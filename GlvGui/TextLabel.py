@@ -8,21 +8,19 @@ from GlvGui.Gridder import TEXT_HEIGHT, LEFT_PAD
 class TextLabel(GlvWidget):
     labelVal: str
     sourceName: str
-    row: int
-    col: int
     def __init__(self, src, inline=True):
         super().__init__()
         if not inline:
             gridder.nextRow(rowHeight=2*TEXT_HEIGHT)
-        self.row = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
-        self.col = gridder.takeCol()
+        self.y = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
+        self.x = gridder.takeCol()
         self.labelVal = ''
         self.sourceName = self.in_src.sourceName()
     def guiUpdate(self):
         sourceSurface = sansFont.render(self.sourceName, False, colors.text())
-        root.blit(sourceSurface, (self.col, self.row))
+        root.blit(sourceSurface, (self.x, self.y))
 
         valSurface = serifFont.render(self.labelVal, False, colors.text())
-        root.blit(valSurface, (self.col, self.row + TEXT_HEIGHT))
+        root.blit(valSurface, (self.x, self.y + TEXT_HEIGHT))
     def update(self):
         self.labelVal = str(self.in_src.value())[:14]

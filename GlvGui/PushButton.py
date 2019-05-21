@@ -11,12 +11,10 @@ SET = 1
 RESET = 2
 class PushButton(GlvWidget):
     label: str
-    row: int
-    col: int
     def __init__(self, label='Ur Butt'):
         super().__init__()
-        self.row = gridder.shareRow(rowHeight=2 * TEXT_HEIGHT)
-        self.col = gridder.takeCol()
+        self.y = gridder.shareRow(rowHeight=2 * TEXT_HEIGHT)
+        self.x = gridder.takeCol()
         self.label = label
         self.primed = False
         self.state = IDLE
@@ -24,7 +22,7 @@ class PushButton(GlvWidget):
         borderColor = colors.text()
         textColor = colors.text()
         # handle clicks
-        buttonRect = pygame.Rect(self.col, self.row, COL_WIDTH, 2 * TEXT_HEIGHT)
+        buttonRect = pygame.Rect(self.x, self.y, COL_WIDTH, 2 * TEXT_HEIGHT)
         mouseOver = buttonRect.collidepoint(mousePos())
         if self.primed:
             if mouseReleased():
@@ -42,8 +40,8 @@ class PushButton(GlvWidget):
         elif buttonRect.collidepoint(mousePos()):
             borderColor = colors.accent()
         
-        midX = self.col + COL_WIDTH / 2
-        midY = self.row + (2 * TEXT_HEIGHT) / 2
+        midX = self.x + COL_WIDTH / 2
+        midY = self.y + (2 * TEXT_HEIGHT) / 2
         pygame.draw.rect(root, borderColor, buttonRect, 4)
         
         surface = sansFont.render(self.label, False, textColor)

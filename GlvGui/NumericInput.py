@@ -7,12 +7,10 @@ from GlvGui.Gridder import ROW_HEIGHT, COL_WIDTH, TEXT_HEIGHT
 from GlvGui.TextInputModule import TextInput
 class NumericInput(GlvWidget):
     label: str
-    row: int
-    col: int
     def __init__(self, label='Ur #'):
         super().__init__()
-        self.row = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
-        self.col = gridder.takeCol()
+        self.y = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
+        self.x = gridder.takeCol()
         self.label = label
         self.textInput = TextInput(
             font_family='Courier',
@@ -23,7 +21,7 @@ class NumericInput(GlvWidget):
         self.focused = False
         self.lastText = ''
     def guiUpdate(self):
-        boundingRect = pygame.Rect(self.col, self.row + 0.8 * TEXT_HEIGHT, COL_WIDTH, 1.1 * TEXT_HEIGHT)
+        boundingRect = pygame.Rect(self.x, self.y + 0.8 * TEXT_HEIGHT, COL_WIDTH, 1.1 * TEXT_HEIGHT)
         borderColor = colors.text()
         if mousePressed():
             self.focused = boundingRect.collidepoint(mousePos())
@@ -44,10 +42,10 @@ class NumericInput(GlvWidget):
                 except:
                     pass
                 self.lastText = inputText
-        root.blit(self.textInput.get_surface(), (self.col + 10, self.row + 1.1 * TEXT_HEIGHT))
+        root.blit(self.textInput.get_surface(), (self.x + 10, self.y + 1.1 * TEXT_HEIGHT))
         pygame.draw.rect(root, borderColor, boundingRect, 2)
         labelSurface = sansFont.render(self.label, False, colors.text())
-        root.blit(labelSurface, (self.col, self.row))
+        root.blit(labelSurface, (self.x, self.y))
 
 def parseNum(numStr):
     # if decimal point, then get rid of it

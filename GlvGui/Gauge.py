@@ -4,6 +4,7 @@ import pygame
 from GlvGui.GlvGui import *
 from GlvGui.GlvWidget import GlvWidget
 from GlvGui.Gridder import TEXT_HEIGHT, ROW_HEIGHT, COL_WIDTH
+from GlvGui.mathUtils import *
 from math import pi, sin, cos
 
 class Gauge(GlvWidget):
@@ -17,8 +18,8 @@ class Gauge(GlvWidget):
     color: int
     def __init__(self, src, minVal=0, maxVal=100, color=None):
         super().__init__()
-        self.row = gridder.shareRow()
-        self.col = gridder.takeCol()
+        self.y = gridder.shareRow()
+        self.x = gridder.takeCol()
         self.minVal = minVal
         self.maxVal = maxVal
         self.value = minVal
@@ -27,9 +28,9 @@ class Gauge(GlvWidget):
         self.clamped = False
 
         # perform offset calculations
-        self.textY = self.row + ROW_HEIGHT - 2 * TEXT_HEIGHT
+        self.textY = self.y + ROW_HEIGHT - 2 * TEXT_HEIGHT
         self.radius = COL_WIDTH / 2
-        self.origin = self.col + self.radius
+        self.origin = self.x + self.radius
     def guiUpdate(self):
         # draw gauge
         lineColor = self.color
@@ -55,21 +56,14 @@ class Gauge(GlvWidget):
         maxSurface = detailFont.render(str(self.maxVal), False, colors.text())
         midSurface = detailFont.render(f'{((self.minVal + self.maxVal) / 2):.2f}', False, colors.text())
         detailY = self.textY - TEXT_HEIGHT / 2
-        maxSurfaceX = self.col + COL_WIDTH - maxSurface.get_width()
-        root.blit(minSurface, (self.col, detailY))
+        maxSurfaceX = self.x + COL_WIDTH - maxSurface.get_width()
+        root.blit(minSurface, (self.x, detailY))
         root.blit(maxSurface, (maxSurfaceX, detailY))
-        root.blit(midSurface, (self.centerOffset(midSurface), self.row))
+        root.blit(midSurface, (self.centerOffset(midSurface), self.y))
     
     def centerOffset(self, surface):
-        return self.col + ((COL_WIDTH - surface.get_width()) / 2)
+        return self.x + ((COL_WIDTH - surface.get_width()) / 2)
 
     def update(self):
         self.value = clamp(self.src(), self.minVal, self.maxVal)
         self.clamped = self.value != self.src()
-
-def clamp(val, minVal, maxVal) -> float:
-    return max(minVal, min(val, maxVal))
-def rescale(n, range1, range2):
-    delta1 = range1[1] - range1[0]
-    delta2 = range2[1] - range2[0]
-    return (delta2 * (n - range1[0]) / delta1) + range2[0]

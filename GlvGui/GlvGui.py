@@ -1,6 +1,6 @@
 import pygame
 from GlvCommon import *
-from typing import List
+from typing import List, Dict
 from GlvGui.Gridder import Gridder, WINDOW_HEIGHT, WINDOW_WIDTH
 from time import time
 from GlvGui.ColorManager import ColorManager
@@ -20,6 +20,13 @@ root = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
 guiFuncs: List[Func] = list()
 def registerSelf(func: Func):
     guiFuncs.append(func)
+
+pageIndex = 0
+grids: Dict[int, Gridder] = {}
+def grid(num=pageIndex):
+    if not num in grids:
+        grids[num] = Gridder()
+    return grids[pageIndex]
 
 def startGui():
     try:
@@ -45,7 +52,7 @@ def mousePressed():
 def mouseReleased():
     return mouseReleasedEvt
 def processEvents():
-    global dying, mousePressedEvt, mouseReleasedEvt, events
+    global dying, mousePressedEvt, mouseReleasedEvt, events, WINDOW_HEIGHT, WINDOW_WIDTH
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
