@@ -18,24 +18,29 @@ colors = ColorManager()
 root = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
 
 pageIndex = 0
-grids: Dict[int, Gridder] = {}
-pageWidgets: Dict[int, List] = {}
+grids: List[Gridder] = [Gridder()]
+pageWidgets: List[List] = [[]]
 def grid():
-    global pageIndex
-    if not pageIndex in grids:
-        grids[pageIndex] = Gridder()
     return grids[pageIndex]
 def registerSelf(func):
-    global pageWidgets, pageIndex
-    if not pageIndex in grids:
-        pageWidgets[pageIndex] = []
     pageWidgets[pageIndex].append(func)
 def nextPage():
-    global pageIndex
+    global pageIndex, pageWidgets, pageGrids
     pageIndex = pageIndex + 1
+    if pageIndex >= len(pageWidgets):
+        pageWidgets.append([])
+        grids.append(Gridder())
 def prevPage():
     global pageIndex
+    if pageIndex is 0:
+        return
     pageIndex = pageIndex - 1
+pageBack = prevPage
+def pageForward():
+    global pageIndex
+    if pageIndex >= len(grids) - 1:
+        return
+    pageIndex = pageIndex + 1
 def startGui():
     global pageIndex
     try:
@@ -88,30 +93,30 @@ def processEvents():
                     print(graph)
                     print('Could not open graphview visualizer, do you have them installed from https://www.graphviz.org/download/ ?')
             elif event.key == pygame.K_F3:
-                prevPage()
+                pageBack()
             elif event.key == pygame.K_F4:
-                nextPage()
+                pageForward()
 
 def resetEvents():
     global mousePressedEvt, mouseReleasedEvt
     mousePressedEvt = False
     mouseReleasedEvt = False
 def glvLoop():
+    pageCount = len(grids)
     while not dying:
         startTime = time()
         processEvents()
         root.fill(colors.back()) # update blanking
-        if pageIndex in pageWidgets:
-            for guiFunc in pageWidgets[pageIndex]:
-                guiFunc.guiUpdate()
+        for guiFunc in pageWidgets[pageIndex]:
+            guiFunc.guiUpdate()
         
         # hz display
         timeSpan = time() - startTime
-        caption = f'pg {pageIndex} '
+        caption = f'pg {pageIndex+1}/{pageCount} '
         refreshCaption = '( ♾️ hz )'
         if timeSpan != 0:
             rate = 1 / timeSpan
-            refreshCaption = f'( {rate:06.2f} hz )'
+            refreshCaption = f'( {rate:07.2f} hz )'
         caption += refreshCaption
         surface = serifFont.render(caption, False, colors.text())
         root.blit(surface, (WINDOW_WIDTH - surface.get_width(), 0))
