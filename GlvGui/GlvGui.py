@@ -6,6 +6,7 @@ from time import time
 from GlvGui.ColorManager import ColorManager
 import traceback
 from random import *
+import sys
 
 pygame.font.init()
 
@@ -48,7 +49,12 @@ def startGui():
     global pageIndex, root_surface
     try:
         pygame.init()
-        root_surface = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+        # exit is CMD OPT Q
+        openFlags = pygame.RESIZABLE
+        if sys.platform == 'darwin':
+            openFlags = pygame.FULLSCREEN | pygame.HWSURFACE
+            macRant()
+        root_surface = pygame.display.set_mode((0, 0), openFlags)
         WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
         pageIndex = 0
         startThreads()
@@ -57,7 +63,6 @@ def startGui():
     except Exception as e:
         print(e)
         traceback.print_exc()
-    finally:
         killThreads()
 
 dying = False
@@ -102,6 +107,8 @@ def processEvents():
                 pageBack()
             elif event.key == pygame.K_F4:
                 pageForward()
+            elif event.key == pygame.K_ESCAPE:
+                dying = True
 
 def resetEvents():
     global mousePressedEvt, mouseReleasedEvt
@@ -130,3 +137,11 @@ def glvLoop():
 
         resetEvents()
     killThreads()
+
+def macRant():
+    print('<<< MAC USER DETECTED >>>')
+    print("I see you're on a mac and you should be ashamed of yourself")
+    print("This screen will freeze for like 5 seconds, then move your mouse")
+    print("to the top and minimize the screen. This is a mac-only hac.")
+    print("Don't forget: hold FN key to trigger function keys")
+    print('<<< ESC KEY TO CLOSE GUI >>>')

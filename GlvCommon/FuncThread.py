@@ -3,6 +3,8 @@ from typing import List, Dict
 from time import time
 from logging import getLogger, Logger
 import traceback
+from multiprocessing import Pool as ProcPool
+
 class FuncThread(Thread):
     def __init__(self, num: int):
         super().__init__()
@@ -33,19 +35,32 @@ class FuncThread(Thread):
         self.logger.warn('Dead')
 
 logger = getLogger('ThreadPool')
-pool: Dict[int, FuncThread] = {}
+threadPool: Dict[int, FuncThread] = {}
 def getThread(num: int) -> FuncThread:
-    if not (num in pool):
+    if not (num in threadPool):
         newThread = FuncThread(num)
-        pool[num] = newThread
+        threadPool[num] = newThread
         logger.warn(f'Spawning new thread {num}')
         return newThread
-    return pool[num]
+    return threadPool[num]
 
 def startThreads():
-    for thread in pool.values():
+    for thread in threadPool.values():
         thread.start()
     
 def killThreads():
-    for num,thread in pool.items():
+    global procPool
+    for thread in threadPool.values():
         thread.kill()
+    if procPool is not None:
+        procPool.terminate()
+        procPool = None
+        logger.warn('Killed proc pool')
+
+procPool = None
+def pool():
+    global procPool
+    if procPool is None:
+        procPool = ProcPool()
+        logger.warn('Creating multithreading.process pool')
+    return procPool

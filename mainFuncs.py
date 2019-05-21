@@ -31,24 +31,38 @@ class Counter(Func):
             self.counter = self.counter + 1
             self.out(self.counter)
 def fib(n): 
-    if n==1: 
-        return 0
-    elif n==2: 
-        return 1
+    a = 0
+    b = 1
+    if n < 0: 
+        print("Incorrect input") 
+    elif n == 0: 
+        return a 
+    elif n == 1: 
+        return b 
     else: 
-        return fib(n-1)+fib(n-2)
+        for i in range(2,n): 
+            c = a + b 
+            a = b 
+            b = c 
+        return b
 
 class Fibbonaci(Func):
     def __init__(self, **kwargs):
         super().__init__()
-        self.procs = multiprocessing.Pool(1)
-        self.resolved = False
+        pool()
+        self.ready = True
     def shouldUpdate(self):
-        if self.resolved:
-            self.resolved = False
-            return True
-        return False
+        return self.ready
     def update(self):
-        fibVal = self.procs.apply(fib, (100,))
-        self.out(fibVal)
-        self.resolved = True
+        self.ready = False
+        result = pool().apply_async(fib, (90000,))
+        start = time()
+        try:
+            # a high timeout may lead to slower shutdowns as the thread can't check for its exit condition
+            val = result.get(timeout=3)
+            #self.out(val) # remove comment if you want to dump the actual value of the fib
+        except multiprocessing.TimeoutError:
+            print("Process timed out")
+        span = time() - start
+        self.out(span) # comment out if you want the value of the fib. This just shows how long it takes to calculate the fib
+        self.ready = True
