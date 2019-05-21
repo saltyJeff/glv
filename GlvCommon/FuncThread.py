@@ -37,12 +37,15 @@ pool: Dict[int, FuncThread] = {}
 def getThread(num: int) -> FuncThread:
     if not (num in pool):
         newThread = FuncThread(num)
-        newThread.start()
         pool[num] = newThread
         logger.warn(f'Spawning new thread {num}')
         return newThread
     return pool[num]
 
+def startThreads():
+    for thread in pool.values():
+        thread.start()
+    
 def killThreads():
     for num,thread in pool.items():
         thread.kill()

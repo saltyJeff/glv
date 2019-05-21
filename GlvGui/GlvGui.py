@@ -51,6 +51,7 @@ def startGui():
         root_surface = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
         WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
         pageIndex = 0
+        startThreads()
         grid()
         glvLoop()
     except Exception as e:

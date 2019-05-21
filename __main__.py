@@ -1,12 +1,13 @@
 from GlvCommon import *
 from GlvGui import *
 from mainFuncs import *
+from multiprocessing import freeze_support
 
 def main():
     sine = Sinusoidal(1, 1)
     sine >> then(Gauge, minVal=-1, maxVal=1)
     sine >> then(Gauge, minVal=-1, maxVal=1)
-    sine >> then(Gauge, minVal=-1, maxVal=1)
+    Fibbonaci(thread=2) >> TextLabel
     bigSine = Sinusoidal(4, 2)
     grid().nextRow() # use nextRow to move all the gui stuff to the next row
     # AddN blocks for a second so we dump it on its own thread
@@ -23,4 +24,5 @@ def main():
     startGui()
 
 if __name__ == '__main__':
+    freeze_support()
     main()

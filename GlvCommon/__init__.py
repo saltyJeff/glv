@@ -5,8 +5,8 @@ from GlvCommon.Then import then
 from GlvCommon.Variable import Variable
 from GlvCommon.Infix import Infix
 from GlvCommon.Print import Print
-from GlvCommon.FuncThread import killThreads
 from GlvCommon.graphify import makeGraph
+from GlvCommon.FuncThread import killThreads, startThreads
 
 from logging import *
 basicConfig(
@@ -15,4 +15,4 @@ basicConfig(
 logger: Logger = getLogger()
 logger.setLevel(INFO)
 
-__all__ = ['Const', 'Func', 'Input', 'Output', 'then', 'Variable', 'Infix', 'Print', 'killThreads', 'makeGraph']
+__all__ = ['Const', 'Func', 'Input', 'Output', 'then', 'Variable', 'Infix', 'Print', 'killThreads', 'makeGraph', 'startThreads']
