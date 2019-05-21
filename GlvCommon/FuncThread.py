@@ -29,6 +29,7 @@ class FuncThread(Thread):
             except Exception as e:
                 self.logger.error(e)
                 traceback.print_exc()
+                self.die = True
         self.logger.warn('Dead')
 
 logger = getLogger('ThreadPool')

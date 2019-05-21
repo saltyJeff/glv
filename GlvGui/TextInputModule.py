@@ -11,6 +11,8 @@ import pygame.locals as pl
 
 pygame.font.init()
 
+blacklist = {pl.K_F3, pl.K_F4}
+
 class TextInput:
     """
     This class lets the user input a piece of text, e.g. a name or a message.
@@ -72,7 +74,8 @@ class TextInput:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 self.cursor_visible = True  # So the user sees where he writes
-
+                if event.key in blacklist:
+                    continue
                 # If none exist, create counter for that key:
                 if event.key not in self.keyrepeat_counters:
                     self.keyrepeat_counters[event.key] = [0, event.unicode]
@@ -107,7 +110,7 @@ class TextInput:
 
                 elif event.key == pl.K_HOME:
                     self.cursor_position = 0
-
+                
                 else:
                     # If no special key is pressed, add unicode of key to input_string
                     self.input_string = (

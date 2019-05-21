@@ -8,17 +8,17 @@ def main():
     sine >> then(Gauge, minVal=-1, maxVal=1)
     sine >> then(Gauge, minVal=-1, maxVal=1)
     bigSine = Sinusoidal(4, 2)
-    gridder.nextRow() # use nextRow to move all the gui stuff to the next row
+    grid().nextRow() # use nextRow to move all the gui stuff to the next row
     # AddN blocks for a second so we dump it on its own thread
     bigSine >> then(AddN, 1, thread=3) >> TextLabel
     bigSine >> TextLabel
     bigSine >> TextLabel
-    gridder.nextRow()
+    grid().nextRow()
     ToggleButton(label='toggly boi') >> Counter >> TextLabel
     PushButton(label='pushy boi') >> Counter >> TextLabel
-    gridder.nextRow()
+    nextPage()
     NumericInput(label='hi') >> TextLabel
-    gridder.nextRow()
+    grid().nextRow()
     StringInput(label='string stuff') >> TextLabel
     startGui()
 

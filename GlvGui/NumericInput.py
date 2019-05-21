@@ -9,8 +9,8 @@ class NumericInput(GlvWidget):
     label: str
     def __init__(self, label='Ur #'):
         super().__init__()
-        self.y = gridder.shareRow(rowHeight=2*TEXT_HEIGHT)
-        self.x = gridder.takeCol()
+        self.y = grid().shareRow(rowHeight=2*TEXT_HEIGHT)
+        self.x = grid().takeCol()
         self.label = label
         self.textInput = TextInput(
             font_family='Courier',
