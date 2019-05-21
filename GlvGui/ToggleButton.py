@@ -27,13 +27,13 @@ class ToggleButton(GlvWidget):
         if self.set:
             borderColor = colors.accent()
             textColor = colors.back()
-            pygame.draw.rect(root, colors.text(), buttonRect)
+            pygame.draw.rect(root(), colors.text(), buttonRect)
         
         midX = self.x + COL_WIDTH / 2
         midY = self.y + (2 * TEXT_HEIGHT) / 2
-        pygame.draw.rect(root, borderColor, buttonRect, 4)
+        pygame.draw.rect(root(), borderColor, buttonRect, 4)
         
         surface = sansFont.render(self.label, False, textColor)
         textX = midX - surface.get_width() / 2
         textY = midY - surface.get_height() / 2
-        root.blit(surface, (textX, textY))
+        root().blit(surface, (textX, textY))

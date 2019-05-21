@@ -38,7 +38,7 @@ class StringInput(GlvWidget):
             if self.lastText != inputText:
                 self.out(inputText)
                 self.lastText = inputText
-        root.blit(self.textInput.get_surface(), (self.x + 10, self.y + 1.1 * TEXT_HEIGHT))
-        pygame.draw.rect(root, borderColor, boundingRect, 2)
+        root().blit(self.textInput.get_surface(), (self.x + 10, self.y + 1.1 * TEXT_HEIGHT))
+        pygame.draw.rect(root(), borderColor, boundingRect, 2)
         labelSurface = sansFont.render(self.label, False, colors.text())
-        root.blit(labelSurface, (self.x, self.y))
+        root().blit(labelSurface, (self.x, self.y))

@@ -1,21 +1,19 @@
 import pygame
 from GlvCommon import *
 from typing import List, Dict
-from GlvGui.Gridder import Gridder, WINDOW_HEIGHT, WINDOW_WIDTH
+from GlvGui.Gridder import Gridder
 from time import time
 from GlvGui.ColorManager import ColorManager
 import traceback
 from random import *
 
-pygame.init()
+pygame.font.init()
 
 sansFont = pygame.font.SysFont("Calibri", 18)
 serifFont = pygame.font.SysFont("Courier", 18)
 detailFont = pygame.font.SysFont("Courier", 12)
 
 colors = ColorManager()
-
-root = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
 
 pageIndex = 0
 grids: List[Gridder] = [Gridder()]
@@ -41,9 +39,17 @@ def pageForward():
     if pageIndex >= len(grids) - 1:
         return
     pageIndex = pageIndex + 1
+root_surface = None
+WINDOW_WIDTH = 0 
+WINDOW_HEIGHT = 0
+def root():
+    return root_surface
 def startGui():
-    global pageIndex
+    global pageIndex, root_surface
     try:
+        pygame.init()
+        root_surface = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+        WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
         pageIndex = 0
         grid()
         glvLoop()
@@ -54,7 +60,6 @@ def startGui():
         killThreads()
 
 dying = False
-WINDOW_WIDTH, WINDOW_HEIGHT = pygame.display.get_surface().get_size()
 
 events = None
 def getEvents():
@@ -106,7 +111,7 @@ def glvLoop():
     while not dying:
         startTime = time()
         processEvents()
-        root.fill(colors.back()) # update blanking
+        root().fill(colors.back()) # update blanking
         for guiFunc in pageWidgets[pageIndex]:
             guiFunc.guiUpdate()
         
@@ -119,7 +124,7 @@ def glvLoop():
             refreshCaption = f'( {rate:06.2f} hz )'
         caption += refreshCaption
         surface = serifFont.render(caption, False, colors.text())
-        root.blit(surface, (WINDOW_WIDTH - surface.get_width(), 0))
+        root().blit(surface, (WINDOW_WIDTH - surface.get_width(), 0))
         pygame.display.flip()
 
         resetEvents()

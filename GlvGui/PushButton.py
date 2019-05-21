@@ -36,18 +36,18 @@ class PushButton(GlvWidget):
         if self.primed:
             borderColor = colors.accent()
             textColor = colors.back()
-            pygame.draw.rect(root, colors.text(), buttonRect)
+            pygame.draw.rect(root(), colors.text(), buttonRect)
         elif buttonRect.collidepoint(mousePos()):
             borderColor = colors.accent()
         
         midX = self.x + COL_WIDTH / 2
         midY = self.y + (2 * TEXT_HEIGHT) / 2
-        pygame.draw.rect(root, borderColor, buttonRect, 4)
+        pygame.draw.rect(root(), borderColor, buttonRect, 4)
         
         surface = sansFont.render(self.label, False, textColor)
         textX = midX - surface.get_width() / 2
         textY = midY - surface.get_height() / 2
-        root.blit(surface, (textX, textY))
+        root().blit(surface, (textX, textY))
     def shouldUpdate(self):
         return self.state != IDLE
     def update(self):

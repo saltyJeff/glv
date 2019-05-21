@@ -42,10 +42,10 @@ class NumericInput(GlvWidget):
                 except:
                     pass
                 self.lastText = inputText
-        root.blit(self.textInput.get_surface(), (self.x + 10, self.y + 1.1 * TEXT_HEIGHT))
-        pygame.draw.rect(root, borderColor, boundingRect, 2)
+        root().blit(self.textInput.get_surface(), (self.x + 10, self.y + 1.1 * TEXT_HEIGHT))
+        pygame.draw.rect(root(), borderColor, boundingRect, 2)
         labelSurface = sansFont.render(self.label, False, colors.text())
-        root.blit(labelSurface, (self.x, self.y))
+        root().blit(labelSurface, (self.x, self.y))
 
 def parseNum(numStr):
     # if decimal point, then get rid of it

@@ -40,7 +40,7 @@ class Gauge(GlvWidget):
         theta = pi - theta
         endX = self.origin + self.radius * cos(theta)
         endY = self.textY - self.radius * sin(theta)
-        pygame.draw.line(root, lineColor, (self.origin, self.textY), (endX, endY))
+        pygame.draw.line(root(), lineColor, (self.origin, self.textY), (endX, endY))
         
         # draw labels
         titleSurface = sansFont.render(self.sourceName, False, colors.text())
@@ -48,8 +48,8 @@ class Gauge(GlvWidget):
         if self.clamped:
             valText = '! ' + valText + ' !'
         valSurface = detailFont.render(valText, False, colors.text())
-        root.blit(titleSurface, (self.centerOffset(titleSurface), self.textY))
-        root.blit(valSurface, (self.centerOffset(valSurface), self.textY + TEXT_HEIGHT))
+        root().blit(titleSurface, (self.centerOffset(titleSurface), self.textY))
+        root().blit(valSurface, (self.centerOffset(valSurface), self.textY + TEXT_HEIGHT))
         
         # annotate the gauge's min and max
         minSurface = detailFont.render(str(self.minVal), False, colors.text())
@@ -57,9 +57,9 @@ class Gauge(GlvWidget):
         midSurface = detailFont.render(f'{((self.minVal + self.maxVal) / 2):.2f}', False, colors.text())
         detailY = self.textY - TEXT_HEIGHT / 2
         maxSurfaceX = self.x + COL_WIDTH - maxSurface.get_width()
-        root.blit(minSurface, (self.x, detailY))
-        root.blit(maxSurface, (maxSurfaceX, detailY))
-        root.blit(midSurface, (self.centerOffset(midSurface), self.y))
+        root().blit(minSurface, (self.x, detailY))
+        root().blit(maxSurface, (maxSurfaceX, detailY))
+        root().blit(midSurface, (self.centerOffset(midSurface), self.y))
     
     def centerOffset(self, surface):
         return self.x + ((COL_WIDTH - surface.get_width()) / 2)

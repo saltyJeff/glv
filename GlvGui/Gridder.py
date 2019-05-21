@@ -5,8 +5,6 @@ RIGHT_PAD = 15
 BOTTOM_PAD = 10
 LEFT_PAD = 15
 TOP_PAD = 15
-WINDOW_WIDTH = 0
-WINDOW_HEIGHT = 0
 class Gridder:
     def __init__(self):
         self.thisX = LEFT_PAD
