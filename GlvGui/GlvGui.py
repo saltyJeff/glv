@@ -116,7 +116,7 @@ def glvLoop():
         refreshCaption = '( ♾️ hz )'
         if timeSpan != 0:
             rate = 1 / timeSpan
-            refreshCaption = f'( {rate:07.2f} hz )'
+            refreshCaption = f'( {rate:06.2f} hz )'
         caption += refreshCaption
         surface = serifFont.render(caption, False, colors.text())
         root.blit(surface, (WINDOW_WIDTH - surface.get_width(), 0))
